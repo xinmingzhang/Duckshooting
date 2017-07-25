@@ -1,0 +1,164 @@
+#:import Window kivy.core.window.Window
+#:import random random
+#:import sound sound
+
+<Pause>:
+    background:'bg_wood.png'
+    size_hint: 0.5,0.5
+    separator_height:0
+    title:'Pause'
+    title_align:'center'
+    title_font:'kenvector_future_thin.ttf'
+    auto_dismiss:False
+    FloatLayout:
+        Label:
+            text:'Music'
+            size_hint:0.25,0.2
+            pos_hint:{'center_x':0.25,'center_y':0.8}
+            font_name:'kenvector_future_thin.ttf'
+        Label:
+            text:'SFX'
+            size_hint:0.25,0.2
+            pos_hint:{'center_x':0.25,'center_y':0.6}
+            font_name:'kenvector_future_thin.ttf'
+        Slider:
+            size_hint:0.55,0.2
+            pos_hint:{'center_x':0.75,'center_y':0.8}
+            value:sound.MUSIC.volume
+            max:1
+            min:0
+            on_touch_move:sound.MUSIC.volume = self.value
+        Slider:
+            size_hint:0.55,0.2
+            pos_hint:{'center_x':0.75,'center_y':0.6}
+            value:sound.SHOT.volume
+            max:1
+            min:0
+            on_touch_move:sound.SHOT.volume = self.value;sound.RELOAD.volume = self.value
+        Button:
+            pos_hint:{'center_x':0.25,'center_y':0.2}
+            background_color:0,1,0,1
+            size_hint:0.25,0.2
+            text:'Resume'
+            font_name:'kenvector_future_thin.ttf'
+            on_press:root.dismiss();app.root.current_screen.update()
+        Button:
+            pos_hint:{'center_x':0.75,'center_y':0.2}
+            background_color:1,0,0,1
+            size_hint:0.25,0.2
+            text:'Quit'
+            font_name:'kenvector_future_thin.ttf'
+            on_press:root.dismiss();app.root.current_screen.quit.open()
+
+<Quit>:
+    background:'bg_wood.png'
+    size_hint: 0.5,0.5
+    separator_height:0
+    auto_dismiss:False
+    title:''
+    FloatLayout:
+        Label:
+            text:'Return to main menu?'
+            size_hint:0.25,0.2
+            pos_hint:{'center_x':0.5,'center_y':0.7}
+            font_name:'kenvector_future_thin.ttf'
+        Button:
+            pos_hint:{'center_x':0.25,'center_y':0.2}
+            background_color:0,1,0,1
+            size_hint:0.25,0.2
+            text:'Back'
+            font_name:'kenvector_future_thin.ttf'
+            on_press:root.dismiss();app.root.current_screen.pause.open()
+        Button:
+            pos_hint:{'center_x':0.75,'center_y':0.2}
+            background_color:1,0,0,1
+            size_hint:0.25,0.2
+            text:'OK'
+            font_name:'kenvector_future_thin.ttf'
+            on_press:root.dismiss();app.root.current = 'MENU'
+
+
+<End>:
+    background:'bg_wood.png'
+    size_hint: 0.5,0.5
+    separator_height:0
+    auto_dismiss:False
+    title:''
+    FloatLayout:
+        Image:
+            source:'text_gameover.png'
+            size_hint:0.5,0.5
+            pos_hint:{'center_x':0.5,'center_y':0.9}
+        Image:
+            source:'text_score_small.png'
+            size_hint:0.25,0.25
+            pos_hint:{'x':0.2,'center_y':0.55}
+        BoxLayout:
+            size_hint:0.3,0.3
+            pos_hint:{'x':0.5,'center_y':0.55}
+            Image:
+                opacity:1 if app.root.current_screen.player_score > 9999 else 0
+                source:'text_{}_small.png'.format(app.root.current_screen.player_score//10000)
+            Image:
+                opacity:1 if app.root.current_screen.player_score > 999 else 0
+                source:'text_{}_small.png'.format(app.root.current_screen.player_score%10000//1000)
+            Image:
+                opacity:1 if app.root.current_screen.player_score > 99 else 0
+                source:'text_{}_small.png'.format(app.root.current_screen.player_score%1000//100)
+            Image:
+                opacity:1 if app.root.current_screen.player_score > 9 else 0
+                source:'text_{}_small.png'.format(app.root.current_screen.player_score%100//10)
+            Image:
+                source:'text_{}_small.png'.format(app.root.current_screen.player_score%10)
+        Button:
+            pos_hint:{'center_x':0.25,'center_y':0.2}
+            background_color:0,1,0,1
+            size_hint:0.25,0.2
+            text:'replay'
+            font_name:'kenvector_future_thin.ttf'
+            on_press:root.dismiss();app.root.current_screen.on_enter()
+        Button:
+            pos_hint:{'center_x':0.75,'center_y':0.2}
+            background_color:1,0,0,1
+            size_hint:0.25,0.2
+            text:'Quit'
+            font_name:'kenvector_future_thin.ttf'
+            on_press:root.dismiss();app.root.current = 'MENU'
+
+<BDuck>:
+    source:'duck_brown.png'
+    size_hint:0.3,0.3
+    pos_hint:{'x':0,'center_y':0.3}
+
+<WDuck>:
+    source:'duck_outline_target_white.png'
+    size_hint:0.25,0.25
+    pos_hint:{'x':0,'center_y':0.2}
+
+<Bullet>:
+    source:'icon_bullet_gold_long.png'
+    size_hint:0.1,1
+
+
+<EBullet>:
+    source:'icon_bullet_empty_long.png'
+    size_hint:0.1,1
+
+<RTarget>:
+    source:'target_red3_outline.png'
+    size_hint:0.2,0.2
+    pos_hint:{'x':random.random(),'center_y':0.5}
+
+<BTarget>:
+    source:'target_white_outline.png'
+    size_hint:0.2,0.2
+    pos_hint:{'x':random.random(),'center_y':0.4}
+
+<FlyingScore>:
+    size_hint:0.08,0.08
+    Image:
+        source:'text_plus_small.png'
+    Image:
+        source:'text_{}_small.png'.format(root.n1)
+    Image:
+        source:'text_{}_small.png'.format(root.n2)
